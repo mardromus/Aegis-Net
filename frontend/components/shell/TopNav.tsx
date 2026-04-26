@@ -18,6 +18,7 @@ const sections = [
   { href: "/dossier", label: "Dossiers" },
   { href: "/traces", label: "Reasoning" },
   { href: "/reason", label: "Console" },
+  { href: "/architecture", label: "Blueprint" },
 ];
 
 export function TopNav() {

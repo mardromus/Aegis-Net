@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Aegis-Net — End</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#F4ECDC;
+    --ink:#1A1612;
+    --ink-2:#3A332A;
+    --ink-3:#6E6354;
+    --rule:rgba(26,22,18,.32);
+    --accent:#B43A26;
+    --moss:#4A6E4A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;overflow:hidden}
+  body{display:flex;align-items:center;justify-content:center}
+  .frame{
+    width:min(1400px,92vw);
+    aspect-ratio:16/9;
+    position:relative;
+    padding:6vmin 7vmin;
+    border:1px solid var(--ink);
+    background:var(--paper);
+    display:flex;flex-direction:column;
+  }
+  .frame::before, .frame::after,
+  .frame > .ne, .frame > .sw{
+    content:"";position:absolute;width:18px;height:18px;border:1.5px solid var(--ink);
+  }
+  .frame::before{top:-9px;left:-9px;border-right:none;border-bottom:none}
+  .frame::after{bottom:-9px;right:-9px;border-left:none;border-top:none}
+  .frame > .ne{top:-9px;right:-9px;border-left:none;border-bottom:none}
+  .frame > .sw{bottom:-9px;left:-9px;border-right:none;border-top:none}
+
+  .masthead{
+    display:flex;align-items:baseline;justify-content:space-between;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:.5em;
+  }
+  .masthead .left{font-family:'Fraunces',serif;font-style:italic;font-size:1.3vmin;color:var(--ink-3)}
+  .masthead .right{
+    font-family:'JetBrains Mono',monospace;
+    font-size:1vmin;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase;
+  }
+  .strong-rule{height:5px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+
+  .center{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:3vmin;padding:0 4vmin;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:1.1vmin;
+    letter-spacing:.4em;text-transform:uppercase;color:var(--accent);
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:800;
+    font-size:13vmin;line-height:.9;letter-spacing:-.012em;
+  }
+  h1 em{font-style:italic;color:var(--accent)}
+  .tagline{
+    font-family:'Fraunces',serif;font-style:italic;font-size:2.6vmin;
+    color:var(--ink-2);max-width:30em;line-height:1.35;
+  }
+
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:0;
+    border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--ink);
+    margin-top:4vmin;width:100%;max-width:1100px;
+  }
+  .stats .cell{padding:2.2vmin 1vmin;border-right:1px solid var(--rule)}
+  .stats .cell:last-child{border-right:none}
+  .stats .num{font-family:'Fraunces',serif;font-feature-settings:"tnum";
+    font-weight:800;font-size:5.2vmin;line-height:1}
+  .stats .num.accent{color:var(--accent)}
+  .stats .num.moss{color:var(--moss)}
+  .stats .lab{
+    font-family:'JetBrains Mono',monospace;font-size:.95vmin;
+    letter-spacing:.25em;color:var(--ink-3);
+    text-transform:uppercase;margin-top:.7vmin;
+  }
+
+  .footer{
+    border-top:1px solid var(--rule);padding-top:1.5vmin;
+    display:flex;align-items:baseline;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:1vmin;color:var(--ink-3);letter-spacing:.2em;text-transform:uppercase;
+  }
+  .footer .accent{color:var(--accent)}
+
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .center > *,.stats{animation:rise .9s ease-out both}
+  h1{animation-delay:.05s}
+  .tagline{animation-delay:.18s}
+  .stats{animation-delay:.32s}
+</style>
+</head>
+<body>
+  <div class="frame">
+    <span class="ne"></span><span class="sw"></span>
+
+    <div class="masthead">
+      <div class="left">— end of dispatch —</div>
+      <div class="right">Aegis-Net · v1.0 · Compound AI</div>
+    </div>
+    <div class="strong-rule"></div>
+
+    <div class="center">
+      <div class="eyebrow">Healthcare intelligence for 1.4 billion lives</div>
+      <h1>
+        Aegis<em>-</em>Net.
+      </h1>
+      <p class="tagline">
+        From a static list of 10,000 buildings to a living intelligence
+        network that knows where the help is — and where it needs to go.
+      </p>
+
+      <div class="stats">
+        <div class="cell">
+          <div class="num">10,000</div>
+          <div class="lab">Facilities audited</div>
+        </div>
+        <div class="cell">
+          <div class="num accent">35</div>
+          <div class="lab">States &amp; UTs</div>
+        </div>
+        <div class="cell">
+          <div class="num accent">69.6%</div>
+          <div class="lab">In a dialysis desert</div>
+        </div>
+        <div class="cell">
+          <div class="num moss">0&nbsp;halluc.</div>
+          <div class="lab">By construction</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Databricks · Agent Bricks · Mosaic AI</span>
+      <span class="accent">▌ Hack-Nation · Challenge 03</span>
+      <span>thank you</span>
+    </div>
+  </div>
+</body>
+</html>
