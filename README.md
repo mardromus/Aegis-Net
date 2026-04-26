@@ -226,14 +226,7 @@ Hack-Nation/
 
 ---
 
-## 7. Hackathon evaluation cheat-sheet
 
-| Criterion | Where it lives |
-|---|---|
-| **Discovery & Verification (35 %)** | `reasoning/chain_of_verification.py` (CoV) + `reasoning/confidence.py` (P(True) × entropy fusion) + `agents/evaluator.py` (quarantine routing). |
-| **IDP Innovation (30 %)** | `ingestion/parser.py` + Genie-Code-style SDP + `knowledge/taxonomy.py` + Mosaic AI Vector Search RAG. |
-| **Social Impact (25 %)** | `geo/e2sfca.py` (mathematical desert detection) + Streamlit map + per-capability `e2sfca_<cap>` Delta tables for NGO planners. |
-| **UX & Transparency (10 %)** | Streamlit Command Centre with **Trace tab** (live agent CoT), citation-anchored facility dossiers, contradiction flags, MLflow 3 tracing. |
 
 ### Stretch goals — all delivered
 
@@ -243,7 +236,7 @@ Hack-Nation/
 
 ---
 
-## 8. Tech stack
+## 7. Tech stack
 
 * **Databricks Data Intelligence Platform** (Free Edition compatible)
 * **Databricks Agent Bricks + Genie Code** (autonomous data engineering)
@@ -257,7 +250,7 @@ Hack-Nation/
 
 ---
 
-## 9. Reproducing the demo numbers
+## 8. Reproducing the demo numbers
 
 ```bash
 python scripts/run_pipeline.py --data-only         # ~9 s
@@ -269,14 +262,6 @@ streamlit run app/streamlit_app.py
 
 ---
 
-## 10. Why we win
 
-We didn't just build a pipeline. We built a **reasoning layer for Indian healthcare** that:
-
-1. **Knows what it doesn't know** (P(True) + entropy fusion + quarantine).
-2. **Cites its evidence** (every claim ships with a literal source span).
-3. **Audits itself in real time** against WHO + NABH guidelines.
-4. **Quantifies inequity** as a precise mathematical object via E2SFCA on H3 hexagons.
-5. **Runs on a laptop or the Databricks Free Edition** with the same code path.
 
 > Aegis-Net turns a static list of 10,000 buildings into a **living intelligence network** that knows where the help is — and where it needs to go.
