@@ -1,0 +1,37 @@
+---
+description: Aegis-Net project conventions
+alwaysApply: true
+---
+
+# Aegis-Net coding conventions
+
+This is a Compound AI healthcare-logistics system. Always preserve these invariants when modifying code.
+
+## Architecture
+
+- **Multi-agent**: `aegis_net/agents/` follows the Supervisor-Worker (Agno) topology. Never collapse multiple agents into one mega-agent.
+- **Hallucination-zero**: every capability claim must pass `aegis_net/reasoning/chain_of_verification.py` before being persisted. Never write code that bypasses CoV.
+- **P(True) gating**: any new claim type must run through `aegis_net/reasoning/confidence.py::fused_confidence` before downstream use.
+- **Evidence-grounded**: every claim must have a row-level citation. The `TrustScorer` enforces this via `citations`.
+
+## Three-mode LLM client
+
+`aegis_net/llm/client.py` resolves to `databricks` → `openai` → `offline`. Any new prompt must:
+
+1. Use **double braces** `{{ }}` for literal JSON examples in `.format()` strings (else Python tries to interpolate them).
+2. Have a corresponding handler in the offline stub (`_stub_*` methods) so the pipeline runs end-to-end without API keys.
+
+## Geo engine
+
+`aegis_net/geo/e2sfca.py` is the math. Never approximate the Stage-1/Stage-2 split or remove the Gaussian decay function. New capability tags must be registered in `aegis_net/ingestion/parser.py::CAPABILITY_VOCAB` AND `aegis_net/knowledge/taxonomy.py::PROCEDURE_DEPENDENCIES`.
+
+## Data contracts
+
+- Bronze: raw Excel ingest, all object columns coerced to strings.
+- Silver: parsed list fields + controlled-vocab `raw_capability_tags`.
+- Gold: silver + `h3_index` + `completeness_score`.
+- Dossier: per-facility JSON-shaped dataframe with `diagnostic`, `evaluation`, `audit`, `trust` keys.
+
+## Tests
+
+`tests/` must stay green: `python -m pytest tests -q`. New behaviour ships with a test.

@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url("https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css");
+
+/* ------------------------------------------------------------------
+   Aegis-Net design tokens — editorial / paper aesthetic.
+   Inspired by data-journalism mastheads (NYT graphics, The Pudding,
+   Bloomberg) — warm paper background, deep ink, single editorial
+   accent. Tabular figures everywhere, real ruled lines, no glow,
+   no glass, no gradient soup.
+   ------------------------------------------------------------------ */
+
+:root {
+  --paper:     #F4ECDC;
+  --paper-2:   #EDE3CF;
+  --paper-3:   #E2D6BA;
+  --paper-4:   #D6C8A6;
+  --ink:       #1A1612;
+  --ink-2:     #3A332A;
+  --ink-3:     #6E6354;
+  --ink-4:     #998D7A;
+  --rule:      rgba(26, 22, 18, 0.14);
+  --rule-strong: rgba(26, 22, 18, 0.32);
+  --accent:    #B43A26;
+  --accent-2:  #1F3A55;
+  --moss:      #4A6E4A;
+  --ochre:     #A77523;
+  --clay:      #8A4F3D;
+}
+
+@layer base {
+  html {
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    color-scheme: light;
+    background: var(--paper);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  body {
+    @apply bg-paper text-ink antialiased min-h-screen;
+    background-color: var(--paper);
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Selection — accent on cream */
+  ::selection {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  /* Tabular numbers globally for any number cell */
+  .num,
+  .font-mono,
+  table td,
+  table th {
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+
+  /* Scrollbar — paper-toned, no flashy neon */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(26, 22, 18, 0.18);
+    border-radius: 1px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(26, 22, 18, 0.32);
+  }
+
+  /* Real ruled headings */
+  hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+  }
+  hr.thick { border-top-width: 2px; }
+  hr.double {
+    border: 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    height: 4px;
+  }
+}
+
+@layer components {
+  /* The masthead double-rule (used on top of every major section) */
+  .double-rule {
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    height: 4px;
+  }
+
+  /* "Card" — really just a pane with a hairline rule, no glass */
+  .pane {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+  }
+  .pane-flush {
+    background: transparent;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Editorial small-caps eyebrow — italic serif, NOT mono shouting */
+  .eyebrow {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-3);
+  }
+
+  /* Number-display — large tabular figures, light weight */
+  .num-display {
+    font-family: "Fraunces", serif;
+    font-feature-settings: "tnum" 1, "lnum" 1, "ss01" 1;
+    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 0;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  /* Body link — underlined, no flashy hover */
+  .link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule-strong);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s ease;
+  }
+  .link:hover {
+    text-decoration-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Pill — paper-toned, no glow */
+  .tag {
+    @apply inline-flex items-center gap-1.5 px-1.5 py-0.5 text-[10px] font-mono tracking-wide;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
+    color: var(--ink-2);
+    border-radius: 1px;
+  }
+  .tag-accent {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(180, 58, 38, 0.06);
+  }
+
+  /* Button — letterpress style */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-150;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 0;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .btn:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn-accent {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  /* Editorial chart axis */
+  .axis text {
+    fill: var(--ink-3);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+  }
+
+  /* Newspaper column rule */
+  .col-rule {
+    column-rule: 1px solid var(--rule);
+  }
+
+  /* Drop cap (used in body intros) */
+  .dropcap::first-letter {
+    font-family: "Fraunces", serif;
+    font-weight: 700;
+    font-size: 4.2rem;
+    line-height: 0.9;
+    float: left;
+    margin: 0.1rem 0.6rem -0.2rem 0;
+    color: var(--accent);
+  }
+
+  /* Trust band swatches — muted, not neon */
+  .swatch-high      { background: #4A6E4A; }
+  .swatch-medium    { background: #3B5C7A; }
+  .swatch-low       { background: #A77523; }
+  .swatch-quarantine{ background: #B43A26; }
+}
+
+@layer utilities {
+  .grain {
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .col-2 { columns: 2; column-gap: 2.25rem; }
+  .col-3 { columns: 3; column-gap: 2.25rem; }
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+}
+
+/* MapLibre — quiet attribution, paper-tone */
+.maplibregl-ctrl-attrib {
+  background: rgba(244, 236, 220, 0.85) !important;
+  color: rgba(26, 22, 18, 0.55) !important;
+  font-size: 10px !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+.maplibregl-ctrl-attrib a { color: rgba(26, 22, 18, 0.75) !important; }
+.maplibregl-canvas:focus { outline: none !important; }
+.maplibregl-popup-content {
+  background: var(--paper) !important;
+  border: 1px solid var(--ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 var(--ink) !important;
+  padding: 10px 12px !important;
+  font-family: "Inter", sans-serif !important;
+  color: var(--ink) !important;
+}
+.maplibregl-popup-tip { display: none !important; }
+.maplibregl-ctrl-group {
+  background: var(--paper) !important;
+  border: 1px solid var(--ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 2px 2px 0 var(--ink) !important;
+}
+.maplibregl-ctrl-group button { background: transparent !important; }

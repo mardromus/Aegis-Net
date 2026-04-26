@@ -1,0 +1,86 @@
+# Databricks Asset Bundle for Aegis-Net
+# Deploy with:
+#   databricks bundle validate
+#   databricks bundle deploy -t dev
+#   databricks bundle run aegis_full_pipeline -t dev
+bundle:
+  name: aegis-net
+
+variables:
+  catalog:
+    description: Unity Catalog name
+    default: main
+  schema:
+    description: Schema for Aegis-Net tables
+    default: aegis
+  dataset_path:
+    description: Volume path containing the VF dataset
+    default: /Volumes/main/aegis/raw/VF_Hackathon_Dataset_India_Large.xlsx
+  vector_endpoint:
+    default: aegis_vector_endpoint
+  vector_index:
+    default: main.aegis.medical_knowledge_index
+  llm_endpoint:
+    default: databricks-meta-llama-3-3-70b-instruct
+
+resources:
+  jobs:
+    aegis_full_pipeline:
+      name: "Aegis-Net • Full Pipeline"
+      tasks:
+        - task_key: ingest
+          notebook_task:
+            notebook_path: ./notebooks/01_ingest_and_normalize
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              dataset_path: ${var.dataset_path}
+        - task_key: vector_search
+          depends_on:
+            - task_key: ingest
+          notebook_task:
+            notebook_path: ./notebooks/02_vector_search_setup
+            base_parameters:
+              vector_endpoint: ${var.vector_endpoint}
+              vector_index: ${var.vector_index}
+        - task_key: agent_swarm
+          depends_on:
+            - task_key: vector_search
+          notebook_task:
+            notebook_path: ./notebooks/03_agent_swarm_audit
+            base_parameters:
+              llm_endpoint: ${var.llm_endpoint}
+              vector_endpoint: ${var.vector_endpoint}
+              vector_index: ${var.vector_index}
+        - task_key: geo_engine
+          depends_on:
+            - task_key: agent_swarm
+          notebook_task:
+            notebook_path: ./notebooks/04_geospatial_e2sfca
+        - task_key: dashboard_data
+          depends_on:
+            - task_key: geo_engine
+          notebook_task:
+            notebook_path: ./notebooks/05_kepler_visualization
+
+  apps:
+    aegis_command_centre:
+      name: aegis-command-centre
+      description: "Aegis-Net Streamlit dashboard"
+      source_code_path: ./app
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: ${env.DATABRICKS_HOST}
+
+  prod:
+    workspace:
+      host: ${env.DATABRICKS_HOST}
+    resources:
+      jobs:
+        aegis_full_pipeline:
+          schedule:
+            quartz_cron_expression: "0 0 */6 * * ?"
+            timezone_id: Asia/Kolkata
